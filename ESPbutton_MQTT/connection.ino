@@ -6,30 +6,28 @@ void init_wifi()
     WiFi.hostname(HOSTNAME);
     WiFi.mode(WIFI_STA);
 
-    // cautare retea
-    int n = WiFi.scanNetworks();
-    for (i = 0; i < n; ++i)
-    {
-        if (WiFi.SSID(i) == ssid)
-        { // try current ssid
-            WiFi.begin(ssid, pass);
-            break;
-        }
-        if (WiFi.SSID(i) == ssidb)
-        { // try backup ssid
-            WiFi.begin(ssidb, passb);
-            break;
-        }
-    }
+    WiFi.begin(ssid, pass);
 
-    // astept conexiunea 20sec.
     i = 0;
-    while (WiFi.status() != WL_CONNECTED)
+    while (WiFi.status() != WL_CONNECTED && i < 100)
     {
         delay(100);
         i++;
-        if (i > 200)
-            ESP.restart();
+    }
+
+    // if first network not reachable try second one
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        WiFi.begin(ssidb, passb);
+
+        i = 0;
+        while (WiFi.status() != WL_CONNECTED)
+        {
+            delay(100);
+            i++;
+            if (i > 200)
+                ESP.restart();
+        }
     }
 }
 

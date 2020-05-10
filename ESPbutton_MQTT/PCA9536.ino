@@ -1,11 +1,15 @@
 void check_PCA()
 {
     Wire.beginTransmission(PCA_ADDR);
-    if (Wire.endTransmission() != 0)
+
+    if (Wire.endTransmission() == 0)
     {
-        // we have no PCA9536 on the bus
-        ESP.restart();
+        // PCA 9536 found!
+        PCA = true;
+        return;
     }
+
+    PCA = false;
 }
 
 void read_PCA()
@@ -16,17 +20,25 @@ void read_PCA()
     {
         Wire.requestFrom(PCA_ADDR, 1);
         if (Wire.available())
-            butoane = Wire.read();
+            butoane = Wire.read() & 0x0F;
 
         if (butoane != butoane_last)
         {
-            char tx[128];
+            uint8_t ab = butoane & butoane_last;
+            uint8_t xb = butoane ^ ab;
 
-            bat = (float)ESP.getVcc() / FACTOR;
-            sprintf(tx, "{\"t\":\"%s\",\"n\":\"%s\",\"b\":{1:%d,2:%d,3:%d,4:%d},\"bat\":%.2f}", TIP, NAME, bitRead(butoane, 0), bitRead(butoane, 1), bitRead(butoane, 2), bitRead(butoane, 3), bat);
             butoane_last = butoane;
 
-            client.publish(MQTT_PUB_TOPIC, tx, false, 0);
+            if (xb > 0)
+            {
+                char tx[128];
+
+                bat = (float)ESP.getVcc() / FACTOR;
+
+                sprintf(tx, "{\"t\":\"%s\",\"i\":\"%x\",\"b\":{1:%d,2:%d,3:%d,4:%d},\"bat\":%.2f}", TIP, ESP.getChipId(), bitRead(xb, 0), bitRead(xb, 1), bitRead(xb, 2), bitRead(xb, 3), bat);
+
+                client.publish(MQTT_PUB_TOPIC, tx, false, 0);
+            }
         }
     }
     else

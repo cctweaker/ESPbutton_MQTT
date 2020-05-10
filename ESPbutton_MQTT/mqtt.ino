@@ -48,14 +48,18 @@ void mqtt_connect()
 
 void messageReceived(String &topic, String &payload)
 {
-    StaticJsonDocument<256> doc;
-    deserializeJson(doc, payload);
-    yield();
+}
 
-    // command = doc["cmd"];
-    // subcommand = doc["scmd"];
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
-    doc.clear();
+void init_mac_topics()
+{
+    sprintf(HOSTNAME, "%s_%x", TIP, ESP.getChipId());
+    sprintf(MQTT_WILL_TOPIC, "%s%s_%x%s", PREFIX, TIP, ESP.getChipId(), WILL);
+    sprintf(MQTT_PUB_TOPIC, "%s%s_%x%s", PREFIX, TIP, ESP.getChipId(), PUB);
+    sprintf(MQTT_SUB_TOPIC, "%s%s_%x%s", PREFIX, TIP, ESP.getChipId(), SUB);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

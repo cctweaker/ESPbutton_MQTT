@@ -3,28 +3,26 @@
 #include <MQTTClient.h>
 #include <time.h>
 #include <Wire.h>
-#include <ArduinoJson.h>
-// #include <FS.h>
-// #include <ESP8266httpUpdate.h>
 
 #include "private.h"
 #include "mqtt.h"
 #include "variables.h"
 
 BearSSL::WiFiClientSecure net;
-MQTTClient client();
+
+MQTTClient client(256);
+
 time_t now;
 
 void setup()
 {
-  // initialize wifi
-  init_wifi();
-  // get ntp time
-  ntp_time();
-  // take care of certs
-  certification();
-  // setup & connect mqtt
-  mqtt_setup();
+  Wire.begin(2, 0);  // connect SDA to GPIO0 and SCL to GPIO2
+  check_PCA();       // check if PCA9536 is present
+  init_mac_topics(); // get mac and make topics for mqtt
+  init_wifi();       // initialize wifi
+  ntp_time();        // get ntp time
+  certification();   // take care of certs
+  mqtt_setup();      // setup & connect mqtt
 }
 
 void loop()
@@ -32,9 +30,8 @@ void loop()
   if (!client.connected())
     mqtt_connect();
 
-  client.loop();
-
-  read_PCA(); // read buttons
-
+  client.loop(); // loop MQTT client
+  if (PCA)
+    read_PCA(); // read buttons
   delay(50);
 }
