@@ -29,7 +29,8 @@ void read_PCA()
 
             butoane_last = butoane;
 
-            if (xb > 0)
+            if (xb > active_high) // active high buttons
+            // if (xb < active_low) // active low buttons
             {
                 char tx[128];
 
