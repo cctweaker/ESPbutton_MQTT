@@ -1,3 +1,4 @@
+ADC_MODE(ADC_VCC);
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <MQTTClient.h>
@@ -33,5 +34,13 @@ void loop()
   client.loop(); // loop MQTT client
   if (PCA)
     read_PCA(); // read buttons
+
+  if (heartbeat)
+    if ((unsigned long)(millis() - last_heartbeat) > heartbeat_period)
+    {
+      last_heartbeat = millis();
+      send_heartbeat();
+    }
+
   delay(50);
 }

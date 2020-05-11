@@ -1,22 +1,15 @@
 ///////////////////////////////////////////////////////////////////////
-// device type and name
+// device type (used in HOSTNAME and MQTT client id with ESP id)
 ///////////////////////////////////////////////////////////////////////
-// #define TIP "s"         // sensor
-#define TIP "l" // light switch
-// #define TIP "g"      // gateway MQTT
-///////////////////////////////////////////////////////////////////////
-#define NAME "attic"
-// #define NAME "kitchen"
-// #define NAME "gameroom"
-// #define NAME "basement"
-// #define NAME "stairs"
+// #define TIP "sns"         // sensor
+#define TIP "swi" // light switch
+// #define TIP "gtw"      // gateway MQTT
 ///////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////
-// device location and name
+// device location also used as topic prefix
 ///////////////////////////////////////////////////////////////////////
 #define LOC "location"                // location
-const char HOSTNAME[] = TIP "_" NAME; // made up by type & name
 ///////////////////////////////////////////////////////////////////////
 
 // ##      ## #### ######## ####
@@ -57,3 +50,8 @@ const int MQTT_PORT = 8883;
 const char MQTT_USER[] = "mqtt_user";
 const char MQTT_PASS[] = "mqtt_password";
 ///////////////////////////////////////////////////////////////////////
+
+// used topics are:
+// LOC/TIP_ESPid/status - will and status 0/1
+// LOC/TIP_ESPid/in - to send commands to ESP
+// LOC/TIP_ESPid/out - output of buttons / sensor data etc.

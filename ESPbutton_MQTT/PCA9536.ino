@@ -33,7 +33,7 @@ void read_PCA()
             {
                 char tx[128];
 
-                bat = (float)ESP.getVcc() / FACTOR;
+                bat = ESP.getVcc() / FACTOR;
 
                 sprintf(tx, "{\"t\":\"%s\",\"i\":\"%x\",\"b\":{1:%d,2:%d,3:%d,4:%d},\"bat\":%.2f}", TIP, ESP.getChipId(), bitRead(xb, 0), bitRead(xb, 1), bitRead(xb, 2), bitRead(xb, 3), bat);
 

@@ -57,9 +57,24 @@ void messageReceived(String &topic, String &payload)
 void init_mac_topics()
 {
     sprintf(HOSTNAME, "%s_%x", TIP, ESP.getChipId());
-    sprintf(MQTT_WILL_TOPIC, "%s%s_%x%s", PREFIX, TIP, ESP.getChipId(), WILL);
-    sprintf(MQTT_PUB_TOPIC, "%s%s_%x%s", PREFIX, TIP, ESP.getChipId(), PUB);
-    sprintf(MQTT_SUB_TOPIC, "%s%s_%x%s", PREFIX, TIP, ESP.getChipId(), SUB);
+    sprintf(MQTT_WILL_TOPIC, "%s%x%s", PREFIX, ESP.getChipId(), WILL);
+    sprintf(MQTT_PUB_TOPIC, "%s%x%s", PREFIX, ESP.getChipId(), PUB);
+    sprintf(MQTT_SUB_TOPIC, "%s%x%s", PREFIX, ESP.getChipId(), SUB);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void send_heartbeat()
+{
+    char tx[128];
+
+    bat = (float)(ESP.getVcc() / FACTOR);
+
+    sprintf(tx, "{\"t\":\"%s\",\"i\":\"%x\",\"bat\":%.2f}", TIP, ESP.getChipId(), bat);
+
+    client.publish(MQTT_PUB_TOPIC, tx, false, 0);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

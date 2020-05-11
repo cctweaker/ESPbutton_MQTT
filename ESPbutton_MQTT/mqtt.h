@@ -4,6 +4,22 @@
 ///////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////
+// define topics based on ESPid
+///////////////////////////////////////////////////////////////////////
+const char PREFIX[] = LOC "/" TIP "_";
+const char WILL[] = "/status";
+const char PUB[] = "/out";
+const char SUB[] = "/in";
+char MQTT_WILL_TOPIC[40];
+char MQTT_PUB_TOPIC[40];
+char MQTT_SUB_TOPIC[40];
+// used topics are:
+// LOC/TIP_ESPid/status - will and status
+// LOC/TIP_ESPid/in - ESP listens on this topic for commands
+// LOC/TIP_ESPid/out - output of buttons, sensor data etc.
+///////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////
 #ifdef CHECK_CA_ROOT
 // following cert is for Let's Encrypt CA
 // it will authenticate any valid Let's Encrypt issued cert
