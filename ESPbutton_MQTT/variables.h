@@ -12,8 +12,8 @@ bool PCA = false; // if we found PCA on the bus then monitor PCA buttons
 uint8_t butoane = 0;      // holds new button state info
 uint8_t butoane_last = 0; // holds last button state info
 
-#define active_high = 0x00;
-#define active_low = 0x0F;
+#define active_high 0x00
+#define active_low 0x0F
 ///////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////
