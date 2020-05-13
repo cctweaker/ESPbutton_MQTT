@@ -36,7 +36,7 @@ void read_PCA()
 
                 bat = ESP.getVcc() / FACTOR;
 
-                sprintf(tx, "{\"t\":\"%s\",\"i\":\"%x\",\"b\":{1:%d,2:%d,3:%d,4:%d},\"bat\":%.2f}", TIP, ESP.getChipId(), bitRead(xb, 0), bitRead(xb, 1), bitRead(xb, 2), bitRead(xb, 3), bat);
+                sprintf(tx, "{\"t\":\"%s\",\"i\":\"%x\",\"b\":[%d,%d,%d,%d],\"bat\":%.2f}", TIP, ESP.getChipId(), bitRead(xb, 0), bitRead(xb, 1), bitRead(xb, 2), bitRead(xb, 3), bat);
 
                 client.publish(MQTT_PUB_TOPIC, tx, false, 0);
             }
